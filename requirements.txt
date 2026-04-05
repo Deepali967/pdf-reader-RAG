@@ -1,0 +1,9 @@
+langchain
+langchain-openai
+langchain-community
+faiss-cpu
+pypdf>=4.0.0
+python-dotenv>=1.0.0
+tqdm>=4.0.0
+streamlit>=1.0.0
+duckduckgo-search>=5.0.0
