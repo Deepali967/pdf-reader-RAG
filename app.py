@@ -12,11 +12,29 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.tools import DuckDuckGoSearchRun
 
+# Try to import streamlit (for Streamlit Cloud support)
+try:
+    import streamlit as st
+    IS_STREAMLIT = True
+except ImportError:
+    IS_STREAMLIT = False
+
 
 def load_environment():
+    """Load environment variables from .env or Streamlit secrets."""
     load_dotenv()
+    
+    # Try to get API key from Streamlit secrets first (Streamlit Cloud), then from .env
+    if IS_STREAMLIT:
+        try:
+            api_key = st.secrets.get("OPENAI_API_KEY")
+        except:
+            api_key = os.getenv("OPENAI_API_KEY")
+    else:
+        api_key = os.getenv("OPENAI_API_KEY")
+    
     config = {
-        "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY"),
+        "OPENAI_API_KEY": api_key,
     }
     if not config["OPENAI_API_KEY"]:
         raise ValueError("OPENAI_API_KEY is required. Set it in .env or the environment.")
